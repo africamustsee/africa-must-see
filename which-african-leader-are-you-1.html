@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Which African Leader Are You? | Africa Must See</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange: #E8821A;
+    --black: #0a0a0a;
+    --cream: #F5F0E8;
+    --dark-orange: #c46a0e;
+    --grey: #1a1a1a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--black);
+    min-height: 100vh;
+    font-family: 'Barlow', sans-serif;
+    color: var(--cream);
+    overflow-x: hidden;
+  }
+
+  /* Noise texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+    position: relative;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 48px 0 40px;
+    border-bottom: 1px solid rgba(232,130,26,0.2);
+    margin-bottom: 48px;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  .brand {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 5px;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .brand::before, .brand::after {
+    content: '';
+    display: block;
+    width: 30px;
+    height: 1px;
+    background: var(--orange);
+    opacity: 0.5;
+  }
+
+  .quiz-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: clamp(42px, 8vw, 64px);
+    line-height: 0.95;
+    color: var(--cream);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .quiz-title span { color: var(--orange); }
+
+  .quiz-subtitle {
+    font-family: 'Barlow', sans-serif;
+    font-size: 16px;
+    color: rgba(245,240,232,0.55);
+    letter-spacing: 1px;
+  }
+
+  /* Progress bar */
+  .progress-wrap {
+    margin-bottom: 36px;
+    animation: fadeUp 0.5s ease both 0.2s;
+  }
+
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: rgba(245,240,232,0.4);
+    text-transform: uppercase;
+  }
+
+  .progress-bar {
+    height: 3px;
+    background: rgba(232,130,26,0.15);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--orange);
+    border-radius: 2px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Question card */
+  .question-card {
+    background: var(--grey);
+    border: 1px solid rgba(232,130,26,0.15);
+    border-radius: 4px;
+    padding: 44px 40px;
+    margin-bottom: 24px;
+    animation: fadeUp 0.5s ease both 0.1s;
+  }
+
+  .question-number {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 4px;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    opacity: 0.8;
+  }
+
+  .question-text {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: clamp(22px, 4vw, 28px);
+    line-height: 1.3;
+    color: var(--cream);
+  }
+
+  /* Answer options */
+  .options-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    animation: fadeUp 0.5s ease both 0.2s;
+  }
+
+  .option-btn {
+    background: transparent;
+    border: 1px solid rgba(245,240,232,0.12);
+    border-radius: 3px;
+    padding: 20px 24px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: var(--cream);
+  }
+
+  .option-btn:hover {
+    border-color: var(--orange);
+    background: rgba(232,130,26,0.08);
+    transform: translateX(4px);
+  }
+
+  .option-btn.selected {
+    border-color: var(--orange);
+    background: rgba(232,130,26,0.15);
+  }
+
+  .option-letter {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 1px;
+    color: var(--orange);
+    min-width: 28px;
+    height: 28px;
+    border: 1px solid var(--orange);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+
+  .option-btn.selected .option-letter {
+    background: var(--orange);
+    color: var(--black);
+  }
+
+  .option-text {
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    line-height: 1.4;
+    color: rgba(245,240,232,0.85);
+  }
+
+  /* Next button */
+  .next-btn {
+    width: 100%;
+    background: var(--orange);
+    color: var(--black);
+    border: none;
+    padding: 20px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.2s;
+    margin-top: 8px;
+    opacity: 0;
+    pointer-events: none;
+    animation: none;
+  }
+
+  .next-btn.visible {
+    opacity: 1;
+    pointer-events: all;
+    animation: fadeUp 0.3s ease both;
+  }
+
+  .next-btn:hover {
+    background: var(--dark-orange);
+    transform: translateY(-2px);
+  }
+
+  /* RESULT SCREEN */
+  .result-screen {
+    display: none;
+    animation: fadeUp 0.7s ease both;
+  }
+
+  .result-screen.show { display: block; }
+
+  .result-header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  .result-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 5px;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .result-you-are {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: rgba(245,240,232,0.5);
+    font-style: italic;
+    margin-bottom: 10px;
+  }
+
+  .result-name {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: clamp(48px, 10vw, 72px);
+    line-height: 0.95;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .result-country {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 4px;
+    color: rgba(245,240,232,0.4);
+    text-transform: uppercase;
+  }
+
+  .result-icon {
+    font-size: 100px;
+    text-align: center;
+    margin: 32px 0;
+    display: block;
+    filter: grayscale(0.2);
+  }
+
+  .result-card {
+    background: var(--grey);
+    border: 1px solid rgba(232,130,26,0.2);
+    border-radius: 4px;
+    padding: 36px;
+    margin-bottom: 24px;
+  }
+
+  .result-trait-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+
+  .trait-pill {
+    background: rgba(232,130,26,0.12);
+    border: 1px solid rgba(232,130,26,0.3);
+    color: var(--orange);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 2px;
+  }
+
+  .result-description {
+    font-family: 'Barlow', sans-serif;
+    font-size: 16px;
+    line-height: 1.75;
+    color: rgba(245,240,232,0.8);
+    margin-bottom: 24px;
+  }
+
+  .result-quote {
+    border-left: 3px solid var(--orange);
+    padding-left: 20px;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--cream);
+    line-height: 1.5;
+  }
+
+  /* Share section */
+  .share-section {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .share-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 4px;
+    color: rgba(245,240,232,0.4);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .share-text-box {
+    background: var(--grey);
+    border: 1px solid rgba(232,130,26,0.2);
+    border-radius: 3px;
+    padding: 20px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: rgba(245,240,232,0.75);
+    text-align: left;
+    margin-bottom: 16px;
+  }
+
+  .copy-btn {
+    background: transparent;
+    border: 1px solid var(--orange);
+    color: var(--orange);
+    padding: 14px 32px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.2s;
+    margin-right: 12px;
+  }
+
+  .copy-btn:hover { background: rgba(232,130,26,0.1); }
+  .copy-btn.copied { background: var(--orange); color: var(--black); }
+
+  .retry-btn {
+    background: var(--orange);
+    border: none;
+    color: var(--black);
+    padding: 14px 32px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.2s;
+  }
+
+  .retry-btn:hover { background: var(--dark-orange); }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding-top: 40px;
+    border-top: 1px solid rgba(232,130,26,0.1);
+    margin-top: 48px;
+  }
+
+  .footer-brand {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: 4px;
+    color: var(--orange);
+    text-transform: uppercase;
+  }
+
+  .footer-sub {
+    font-family: 'Barlow', sans-serif;
+    font-size: 13px;
+    color: rgba(245,240,232,0.3);
+    margin-top: 6px;
+  }
+
+  /* Animations */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .quiz-section { display: block; }
+  .quiz-section.hidden { display: none; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="brand">Africa Must See</div>
+    <h1 class="quiz-title">Which African<br/><span>Leader</span><br/>Are You?</h1>
+    <p class="quiz-subtitle">7 questions · 2 minutes · Share your result</p>
+  </div>
+
+  <!-- QUIZ SECTION -->
+  <div class="quiz-section" id="quizSection">
+    <div class="progress-wrap">
+      <div class="progress-info">
+        <span id="progressText">Question 1 of 7</span>
+        <span id="progressPct">14%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width:14%"></div>
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="question-number" id="questionNumber">Question 01</div>
+      <div class="question-text" id="questionText"></div>
+    </div>
+
+    <div class="options-grid" id="optionsGrid"></div>
+    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Continue →</button>
+  </div>
+
+  <!-- RESULT SECTION -->
+  <div class="result-screen" id="resultScreen">
+    <div class="result-header">
+      <div class="result-label">Your result</div>
+      <div class="result-you-are">You are...</div>
+      <div class="result-name" id="resultName"></div>
+      <div class="result-country" id="resultCountry"></div>
+    </div>
+
+    <div class="result-icon" id="resultIcon"></div>
+
+    <div class="result-card">
+      <div class="result-trait-row" id="resultTraits"></div>
+      <div class="result-description" id="resultDescription"></div>
+      <div class="result-quote" id="resultQuote"></div>
+    </div>
+
+    <div class="share-section">
+      <div class="share-title">Share your result</div>
+      <div class="share-text-box" id="shareText"></div>
+      <button class="copy-btn" id="copyBtn" onclick="copyResult()">Copy & Share</button>
+      <button class="retry-btn" onclick="restartQuiz()">Take Again</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-brand">Africa Must See</div>
+    <div class="footer-sub">Pan-African stories that matter</div>
+  </div>
+</div>
+
+<script>
+const questions = [
+  {
+    text: "Your country is struggling economically. What is your first move?",
+    options: [
+      { text: "Unite with neighboring countries — alone we are weak, together we are powerful.", leader: "nkrumah" },
+      { text: "Seize control of foreign-owned industries and return wealth to the people.", leader: "sankara" },
+      { text: "Negotiate boldly with world powers from a position of dignity.", leader: "mandela" },
+      { text: "Build military strength first — no one respects a weak nation.", leader: "gaddafi" }
+    ]
+  },
+  {
+    text: "A foreign power is interfering in your nation's affairs. How do you respond?",
+    options: [
+      { text: "Call an emergency African summit — this affects all of us.", leader: "nkrumah" },
+      { text: "Expel them immediately and expose their operations publicly.", leader: "sankara" },
+      { text: "Engage in diplomacy but never compromise your people's dignity.", leader: "mandela" },
+      { text: "Challenge them directly and loudly — fear no one.", leader: "gaddafi" }
+    ]
+  },
+  {
+    text: "How do you feel about Western aid and loans?",
+    options: [
+      { text: "Africa must fund itself — we have enough resources.", leader: "nkrumah" },
+      { text: "Reject it entirely. Aid is a new form of colonialism.", leader: "sankara" },
+      { text: "Accept help but always protect sovereignty in negotiations.", leader: "mandela" },
+      { text: "Use their money to build your own power, then cut them off.", leader: "gaddafi" }
+    ]
+  },
+  {
+    text: "What do you believe is Africa's greatest problem today?",
+    options: [
+      { text: "Division — 54 borders drawn by Europeans to keep us weak.", leader: "nkrumah" },
+      { text: "Corruption and leaders who serve foreign interests over their people.", leader: "sankara" },
+      { text: "The wound of hatred — we must heal from the inside out.", leader: "mandela" },
+      { text: "Lack of military and economic power on the world stage.", leader: "gaddafi" }
+    ]
+  },
+  {
+    text: "A young person asks you: how do I serve Africa? You tell them:",
+    options: [
+      { text: "Think pan-African. Every decision you make should serve the continent.", leader: "nkrumah" },
+      { text: "Live simply. Reject greed. Serve the poor before yourself.", leader: "sankara" },
+      { text: "Lead with forgiveness and moral courage — that outlasts any weapon.", leader: "mandela" },
+      { text: "Never be afraid to speak the truth, even when the world hates you for it.", leader: "gaddafi" }
+    ]
+  },
+  {
+    text: "Your political opponents are gaining power. What do you do?",
+    options: [
+      { text: "Double down on your ideology — history will prove you right.", leader: "nkrumah" },
+      { text: "Strengthen grassroots support among ordinary people.", leader: "sankara" },
+      { text: "Invite them to dialogue. Enemies become partners through respect.", leader: "mandela" },
+      { text: "Hold your ground. Power is not given — it is kept.", leader: "gaddafi" }
+    ]
+  },
+  {
+    text: "If you could leave one legacy for Africa, what would it be?",
+    options: [
+      { text: "A United States of Africa — one government, one people.", leader: "nkrumah" },
+      { text: "A generation that refuses to be poor in a rich land.", leader: "sankara" },
+      { text: "Proof that peace and reconciliation can rebuild a broken nation.", leader: "mandela" },
+      { text: "An Africa that fears no outside power and answers to no one.", leader: "gaddafi" }
+    ]
+  }
+];
+
+const leaders = {
+  nkrumah: {
+    name: "Kwame Nkrumah",
+    country: "Ghana · 1909–1972",
+    icon: "🇬🇭",
+    traits: ["Visionary", "Pan-Africanist", "Idealist", "Unifier"],
+    description: "You think in centuries, not election cycles. You believe Africa's problems cannot be solved country by country — only together. Like Nkrumah, you carry the burden of a dream so big that even your own people sometimes cannot see it yet. You are ahead of your time, and that is both your gift and your curse.",
+    quote: "\"The independence of Ghana is meaningless unless it is linked up with the total liberation of Africa.\" — Kwame Nkrumah",
+    share: "I took the Africa Must See quiz and I got KWAME NKRUMAH 🇬🇭\n\nI think in centuries. I believe in African unity above all. The dream is too big to give up on.\n\nWhich African leader are you? Take the quiz 👇\n[Africa Must See]"
+  },
+  sankara: {
+    name: "Thomas Sankara",
+    country: "Burkina Faso · 1949–1987",
+    icon: "🇧🇫",
+    traits: ["Revolutionary", "Fearless", "Anti-Corruption", "People's Leader"],
+    description: "You are fire. You see injustice and you cannot stay silent — not for comfort, not for safety, not for anyone. Like Sankara, you believe that true leadership means living like the people you serve. You are suspicious of wealth, allergic to compromise, and willing to die for what you believe. Africa needs more people like you.",
+    quote: "\"You cannot carry out fundamental change without a certain amount of madness.\" — Thomas Sankara",
+    share: "I took the Africa Must See quiz and I got THOMAS SANKARA 🇧🇫\n\nRevolutionary. Fearless. Refuses to be silent about injustice.\n\n\"You cannot carry out fundamental change without a certain amount of madness.\"\n\nWhich African leader are you? Take the quiz 👇\n[Africa Must See]"
+  },
+  mandela: {
+    name: "Nelson Mandela",
+    country: "South Africa · 1918–2013",
+    icon: "🇿🇦",
+    traits: ["Resilient", "Diplomatic", "Moral Courage", "Reconciler"],
+    description: "You carry pain without becoming bitter. Like Mandela, you understand that real strength is choosing forgiveness over revenge. You play the long game — 27 years in prison did not break him, and nothing breaks you either. You believe that healing a nation requires you to reach across the divide, even when it costs you personally. That is rare. That is extraordinary.",
+    quote: "\"It always seems impossible until it is done.\" — Nelson Mandela",
+    share: "I took the Africa Must See quiz and I got NELSON MANDELA 🇿🇦\n\nResilient. Forgiving. Refuses to be broken by anything.\n\n\"It always seems impossible until it is done.\"\n\nWhich African leader are you? Take the quiz 👇\n[Africa Must See]"
+  },
+  gaddafi: {
+    name: "Muammar Gaddafi",
+    country: "Libya · 1942–2011",
+    icon: "🇱🇾",
+    traits: ["Bold", "Controversial", "Unapologetic", "Anti-Imperialist"],
+    description: "You are the most controversial person in any room — and you know it, and you don't care. Like Gaddafi, you speak hard truths that powerful people hate to hear. You believe Africa should bow to no one. You are complex, provocative, and impossible to ignore. History will debate you long after you are gone — but no one will forget you.",
+    quote: "\"I am an international leader, the dean of the Arab rulers, the king of kings of Africa.\" — Muammar Gaddafi",
+    share: "I took the Africa Must See quiz and I got MUAMMAR GADDAFI 🇱🇾\n\nBold. Unapologetic. Africa bows to no one.\n\nControversial? Yes. Forgettable? Never.\n\nWhich African leader are you? Take the quiz 👇\n[Africa Must See]"
+  }
+};
+
+let currentQuestion = 0;
+let scores = { nkrumah: 0, sankara: 0, mandela: 0, gaddafi: 0 };
+let selectedOption = null;
+
+function renderQuestion() {
+  const q = questions[currentQuestion];
+  document.getElementById('questionNumber').textContent = 'Question ' + String(currentQuestion + 1).padStart(2, '0');
+  document.getElementById('questionText').textContent = q.text;
+  document.getElementById('progressText').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+  const pct = Math.round(((currentQuestion + 1) / questions.length) * 100);
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('progressFill').style.width = pct + '%';
+
+  const grid = document.getElementById('optionsGrid');
+  grid.innerHTML = '';
+  const letters = ['A', 'B', 'C', 'D'];
+
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span class="option-letter">${letters[i]}</span><span class="option-text">${opt.text}</span>`;
+    btn.onclick = () => selectOption(i, opt.leader, btn);
+    grid.appendChild(btn);
+  });
+
+  selectedOption = null;
+  const nextBtn = document.getElementById('nextBtn');
+  nextBtn.classList.remove('visible');
+
+  // Re-animate
+  document.querySelector('.question-card').style.animation = 'none';
+  grid.style.animation = 'none';
+  setTimeout(() => {
+    document.querySelector('.question-card').style.animation = 'fadeUp 0.4s ease both';
+    grid.style.animation = 'fadeUp 0.4s ease both 0.1s';
+  }, 10);
+}
+
+function selectOption(index, leader, btn) {
+  document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedOption = leader;
+  document.getElementById('nextBtn').classList.add('visible');
+}
+
+function nextQuestion() {
+  if (!selectedOption) return;
+  scores[selectedOption]++;
+  currentQuestion++;
+
+  if (currentQuestion >= questions.length) {
+    showResult();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResult() {
+  document.getElementById('quizSection').classList.add('hidden');
+  const resultScreen = document.getElementById('resultScreen');
+  resultScreen.classList.add('show');
+
+  const top = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
+  const leader = leaders[top];
+
+  document.getElementById('resultName').textContent = leader.name;
+  document.getElementById('resultCountry').textContent = leader.country;
+  document.getElementById('resultIcon').textContent = leader.icon;
+  document.getElementById('resultDescription').textContent = leader.description;
+  document.getElementById('resultQuote').textContent = leader.quote;
+  document.getElementById('shareText').textContent = leader.share;
+
+  const traitsEl = document.getElementById('resultTraits');
+  traitsEl.innerHTML = leader.traits.map(t => `<span class="trait-pill">${t}</span>`).join('');
+}
+
+function copyResult() {
+  const text = document.getElementById('shareText').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copyBtn');
+    btn.textContent = 'Copied! ✓';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'Copy & Share';
+      btn.classList.remove('copied');
+    }, 2500);
+  });
+}
+
+function restartQuiz() {
+  currentQuestion = 0;
+  scores = { nkrumah: 0, sankara: 0, mandela: 0, gaddafi: 0 };
+  selectedOption = null;
+  document.getElementById('resultScreen').classList.remove('show');
+  document.getElementById('quizSection').classList.remove('hidden');
+  renderQuestion();
+  window.scrollTo(0, 0);
+}
+
+renderQuestion();
+</script>
+</body>
+</html>
